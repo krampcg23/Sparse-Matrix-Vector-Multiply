@@ -12,6 +12,7 @@
 #include <omp.h>
 #define LOWER 0.1
 #define UPPER 4.9
+#define NUMTHREADS 2
 
 using namespace std;
 
@@ -111,12 +112,13 @@ void readInput(string inputFile, boost::numeric::ublas::mapped_matrix<double> &M
 
 
 void compute(vector<Points> myMat, vector<double> myVec, vector<double> &myOut) {
-    omp_set_num_threads(8);
-    #pragma omp parallel for
-    for (int i = 0; i < myMat.size(); i++) {
-        double adder = myMat[i].getVal() * myVec[myMat[i].getCol()];
-        #pragma omp atomic
-        myOut[myMat[i].getRow()] += adder;
+    #pragma omp parallel num_threads(NUMTHREADS) shared(myOut)
+    {
+        #pragma omp for schedule(static, 5)
+        for (int i = 0; i < myMat.size(); i+=2) {
+            myOut[myMat[i].getRow()] += myMat[i].getVal() * myVec[myMat[i].getCol()];
+            myOut[myMat[i+1].getRow()] += myMat[i+1].getVal() * myVec[myMat[i+1].getCol()];
+        }
     }
 }
 

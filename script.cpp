@@ -6,8 +6,8 @@ using namespace std;
 int main (int argc, char* argv[]) {
 
     srand(time(NULL));
-    int n = 10000;
-    int input = 9000;
+    int n = 4000;
+    int input = 3003;
     ofstream out("matrix2.txt");
     out << n << " " << n << " " << input <<  endl;
 
