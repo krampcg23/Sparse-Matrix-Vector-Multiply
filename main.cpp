@@ -7,7 +7,7 @@
 #include <omp.h>
 #define LOWER 0.1
 #define UPPER 4.9
-#define NUMTHREADS 4
+#define NUMTHREADS 8
 
 using namespace std;
 
@@ -100,10 +100,13 @@ void readInput(string inputFile, vector<Points> &myMat, vector<double> &myVec) {
 void compute(vector<Points> myMat, vector<double> myVec, vector<double> &myOut) {
     #pragma omp parallel num_threads(NUMTHREADS) shared(myOut)
     {
-        #pragma omp for schedule(static, 5)
-        for (int i = 0; i < myMat.size(); i+=2) {
+        #pragma omp for schedule(auto)
+        for (int i = 0; i < myMat.size(); i+=4) {
+            #pragma omp atomic
             myOut[myMat[i].getRow()] += myMat[i].getVal() * myVec[myMat[i].getCol()];
             myOut[myMat[i+1].getRow()] += myMat[i+1].getVal() * myVec[myMat[i+1].getCol()];
+            myOut[myMat[i+2].getRow()] += myMat[i+2].getVal() * myVec[myMat[i+2].getCol()];
+            myOut[myMat[i+3].getRow()] += myMat[i+3].getVal() * myVec[myMat[i+3].getCol()];
         }
     }
 }
@@ -142,10 +145,10 @@ int main(int argc, char* argv[]) {
         cout << "Time for reading in the file " << duration << endl;
 
         // Time my computation
-        start = clock();
+        double start_time = omp_get_wtime();
         compute(myMat, myVec, myOut);
-        duration = (clock() - start ) / (double) CLOCKS_PER_SEC;
-        cout << "Time for execution using my implementation " << duration << endl;
+        double time = omp_get_wtime() - start_time;
+        cout << "Time for execution using my implementation " << time << endl;
         cout << "=================================" << endl << endl;
     }
 }

@@ -114,12 +114,16 @@ void readInput(string inputFile, boost::numeric::ublas::mapped_matrix<double> &M
 void compute(vector<Points> myMat, vector<double> myVec, vector<double> &myOut) {
     #pragma omp parallel num_threads(NUMTHREADS) shared(myOut)
     {
-        #pragma omp for schedule(static, 5)
-        for (int i = 0; i < myMat.size(); i+=2) {
+        #pragma omp for schedule(auto)
+        for (int i = 0; i < myMat.size(); i+=4) {
+            #pragma omp atomic
             myOut[myMat[i].getRow()] += myMat[i].getVal() * myVec[myMat[i].getCol()];
             myOut[myMat[i+1].getRow()] += myMat[i+1].getVal() * myVec[myMat[i+1].getCol()];
+            myOut[myMat[i+2].getRow()] += myMat[i+2].getVal() * myVec[myMat[i+2].getCol()];
+            myOut[myMat[i+3].getRow()] += myMat[i+3].getVal() * myVec[myMat[i+3].getCol()];
         }
     }
+
 }
 
 double checkForErrors(boost::numeric::ublas::vector<double> Out, vector<double> myOut) {
