@@ -6,9 +6,9 @@ using namespace std;
 int main (int argc, char* argv[]) {
 
     srand(time(NULL));
-    int n = 4000;
-    int input = 3003;
-    ofstream out("matrix2.txt");
+    int n = 5000;
+    int input = 4000;
+    ofstream out("matrix.txt");
     out << n << " " << n << " " << input <<  endl;
 
     for (int i = 0; i < input; i++) {

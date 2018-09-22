@@ -173,11 +173,12 @@ int main(int argc, char* argv[]) {
     duration = (clock() - start ) / (double) CLOCKS_PER_SEC;
     cout << "Time for execution using BOOST " << duration << endl;
 
+
     // Time my computation
-    start = clock();
+    double start_time = omp_get_wtime();
     compute(myMat, myVec, myOut);
-    double durationImp = (clock() - start ) / (double) CLOCKS_PER_SEC;
-    cout << "Time for execution using my implementation " << durationImp << endl;
+    double time = omp_get_wtime() - start_time;
+    cout << "Time for execution using my implementation " << time << endl;
 
     cout << "My implementation was " << duration / durationImp << " times faster" << endl;
 
