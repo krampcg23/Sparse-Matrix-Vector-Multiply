@@ -14,3 +14,5 @@ Matlab file that I used to generate graphs
 Type `make` to compile all the executables.  Also just type `make main_exe` for just main.
 
 To execute, type `make run` to traverse through the 3 inputs we use.  The files are not included in here though, as they are large files.  If you generate one with script, then simply type `./main_exe matrix.txt`
+
+If you would like to verify results, use `boostAndImp_exe` as that contains code to run both boost and my implementation.  Use `matrix.txt` generated with `./script_exe` as that will be a smaller input size that will produce results in a reasonable amount of time (< 30 seconds).

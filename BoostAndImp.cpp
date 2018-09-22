@@ -180,7 +180,7 @@ int main(int argc, char* argv[]) {
     double time = omp_get_wtime() - start_time;
     cout << "Time for execution using my implementation " << time << endl;
 
-    cout << "My implementation was " << duration / durationImp << " times faster" << endl;
+    cout << "My implementation was " << duration / time << " times faster" << endl;
 
     // Check for errors
     double error = checkForErrors(Out, myOut);
